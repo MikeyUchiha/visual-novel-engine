@@ -38,16 +38,16 @@ local dialogue = require( "scripts.dialogue" )
       script.setPlayerName("Mikey")
       
       local dbox = dialogue.drawdbox(1,"Narrator\n")
-      
+     
       function dbox:touch( event )
           if event.phase == "began" then
-              dbox = dialogue.updatetext(dbox,2, "Narrator2\n")
-              print("Processed.")
+              print("Touched dialogue box.")
+              dbox:updatetext(2, "Narrator2\n")
           end
       end
       
-      dbox:addEventListener( "touch", dbox )
-
+      dbox:addEventListener( "touch" ) -- If your object has a .touch function, you can just call "touch"
+      
       -- Initialize the scene here.
       -- Example: add display objects to "sceneGroup", add touch listeners, etc.
       sceneGroup:insert(dbox)
