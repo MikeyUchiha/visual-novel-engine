@@ -1,45 +1,59 @@
+-- dialogue.lua
 local script = require( "scripts.script" )
-local t = {}
-local dialoguebox
-local text
-t.drawdbox = function(scriptNumber,name)
-  dialoguebox = display.newImageRect( "images/dialogue.png", 1000, 200)
-  dialoguebox.x = display.contentCenterX
-  dialoguebox.y = display.contentHeight - dialoguebox.height/2
-  text = t.drawtext(dialoguebox)
-  if name == nil then
-    name = ""
-  end
-  text.text = name..script.get(scriptNumber)
-  return dialoguebox
-end
+local dialogue = {}
 
-t.drawtext = function(dialoguebox)
-  local options =
-  {
-    text = "This is a test.",
-    anchorX = 0,
-    anchorY = 1,
-    y = dialoguebox.y - dialoguebox.height/2,
-    x = display.contentCenterX,
-    width = dialoguebox.width,     --required for multi-line and alignment
-    font = native.systemFont,
-    fontSize = 32
+-- Create the text object for the dialogue box
+local function drawtext(group, box)
+
+  local options = {
+    parent  = group,
+    text    = "This is a test.",
+    width   = box.width,
+    font    = native.systemFont,
+    fontSize = 32,
   }
+
   local text = display.newText(options)
-  text.anchorX = 0.5
+  text.anchorX = 0
   text.anchorY = 0
+  text.x = box.x
+  text.y = box.y
   text:setFillColor(0.2,0.2,0.8)
+
   return text
 end
 
-t.updatetext = function(dialoguebox, scriptNumber, name)
-  if name == nil then
-    name = ""
-  end
-  dialoguebox.text = name..script.get(scriptNumber)
-  return text
+-- Update the text of a dialogue box
+local function updatetext(box, scriptNumber, name)
+  local name = name or ""
+  box.text.text = name..script.get(scriptNumber)
 end
 
-return t
+-- Create the text dialogue box
+function dialogue.drawdbox(scriptNumber, name)
 
+  local group = display.newGroup()
+  group.anchorChildren = true
+
+  local box = display.newImageRect(group, "images/dialogue.png", 1000, 200)
+  box.anchorX = 0
+  box.anchorY = 0
+
+  local name = name or ""
+
+  local text = drawtext(group, box)
+
+  -- Shortcuts
+  group.box = box -- this way you never have to look for group[1], etc.
+  group.text = text
+  group.updatetext = updatetext -- to call, use object:updatetext()
+
+  -- Set position
+  group.anchorX = 0
+  group.anchorY = 1
+  group.x = 0
+  group.y = display.contentHeight
+  return group
+end
+
+return dialogue
