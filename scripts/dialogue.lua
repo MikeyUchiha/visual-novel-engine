@@ -3,7 +3,9 @@ local script = require( "scripts.script" )
 local dialogue = {}
 
 -- Create the text object for the dialogue box
-local function drawtext(group, box)
+local function drawtext(group, box, scriptNumber, name)
+
+  local name = name or ""
 
   local options = {
     parent  = group,
@@ -19,6 +21,8 @@ local function drawtext(group, box)
   text.x = box.x
   text.y = box.y
   text:setFillColor(0.2,0.2,0.8)
+  
+  text.text = name..script.get(scriptNumber)
 
   return text
 end
@@ -41,7 +45,7 @@ function dialogue.drawdbox(scriptNumber, name)
 
   local name = name or ""
 
-  local text = drawtext(group, box)
+  local text = drawtext(group, box, scriptNumber, name)
 
   -- Shortcuts
   group.box = box -- this way you never have to look for group[1], etc.
@@ -49,9 +53,9 @@ function dialogue.drawdbox(scriptNumber, name)
   group.updatetext = updatetext -- to call, use object:updatetext()
 
   -- Set position
-  group.anchorX = 0
+  group.anchorX = 0.5
   group.anchorY = 1
-  group.x = 0
+  group.x = display.contentCenterX
   group.y = display.contentHeight
   return group
 end

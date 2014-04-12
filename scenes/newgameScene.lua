@@ -37,7 +37,7 @@ local dialogue = require( "scripts.dialogue" )
    
       script.setPlayerName("Mikey")
       
-      local dbox = dialogue.drawdbox(1,"Narrator\n")
+      local dbox = dialogue.drawdbox(1)
      
       function dbox:touch( event )
           if event.phase == "began" then
