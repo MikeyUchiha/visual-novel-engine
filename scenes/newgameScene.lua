@@ -1,6 +1,8 @@
 local composer = require( "composer" )
 local script = require( "scripts.script" )
 local dialogue = require( "scripts.dialogue" )
+local character = require( "scripts.character" )
+local timercontroller = require( "scripts.timer" )
 --====================================================================--
 -- SCENE: [NEW GAME]
 --====================================================================--
@@ -37,19 +39,53 @@ local dialogue = require( "scripts.dialogue" )
    
       script.setPlayerName("Mikey")
       
+      local hazelimage = character.make("hazel_edited.png", 432, 639)
+      local hazelimage2 = character.make("hazel_edited.png", 432, 639)
+      
+      local hazelhappy = character.make("hazel_happy.png", 432, 639)
+      
+      local chardisplaygroup = character.entercharacter(hazelimage, "left")
+      --chardisplaygroup:addcharacter( hazelimage2, "right" )
+      
+      
       local dbox = dialogue.drawdbox(1)
-     
-      function dbox:touch( event )
-          if event.phase == "began" then
+      local count = 1
+      function dbox.box:tap( event )
+            print(count)
+            if count == 1 then
               print("Touched dialogue box.")
               dbox:updatetext(2, "Narrator2\n")
-          end
+              chardisplaygroup:addcharacter( hazelimage2, "right" )
+              count = count + 1
+            elseif count == 2 then
+              chardisplaygroup:removecharacter(1)
+              count = count + 1
+            elseif count == 3 then
+              chardisplaygroup:removecharacter(2)
+              count = count + 1
+            else
+              count = nil
+              dbox.isVisible = false
+            end
       end
       
-      dbox:addEventListener( "touch" ) -- If your object has a .touch function, you can just call "touch"
+      local time = timercontroller
+      print(time:getTime())
+      
+      time:addTime(24,0)
+      --time:addTime(23,59) --For some reason
+      --time:addTIme(0,3) --these two lines don't work
+      time:addTime(0,30)
+      time:addTime(0,30)
+      time:addTime(23,0)
+      
+      dbox.box:addEventListener( "tap" )
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+      --dbox:addEventListener( "tap" ) -- If your object has a .touch function, you can just call "touch"
       
       -- Initialize the scene here.
       -- Example: add display objects to "sceneGroup", add touch listeners, etc.
+      sceneGroup:insert(chardisplaygroup)
       sceneGroup:insert(dbox)
   end
 

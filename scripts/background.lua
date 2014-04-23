@@ -18,16 +18,16 @@ local widget = require( "widget" )
 
 --]]
 
-local t = {}
+local background = {}
 
-t.createbg = function(filename)
+background.createbg = function(filename)
     local background = display.newImageRect( "backgrounds/"..filename, 1425, 900)
     background.x = display.contentCenterX
     background.y = display.contentCenterY
     return background
 end
 
-t.createbutton = function(defaultFile, overFile, width, height, label, font, fontSize, onEvent)
+background.createbutton = function(defaultFile, overFile, width, height, label, font, fontSize, onEvent)
   local tempLabel = label or false
   if ( tempLabel ) then
       label = tempLabel
@@ -46,7 +46,6 @@ t.createbutton = function(defaultFile, overFile, width, height, label, font, fon
   end
   local options =
   {
-    id = id,
     defaultFile = "images/"..defaultFile,
     overFile = "images/"..overFile,
     label = label,
@@ -58,8 +57,4 @@ t.createbutton = function(defaultFile, overFile, width, height, label, font, fon
   return button
 end
 
-t.createdialoguebox = function ()
-  
-end
-
-return t
+return background
